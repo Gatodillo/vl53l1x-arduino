@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Arduino.h>
+#include <i2c_t3.h>
 
 class VL53L1X
 {
@@ -1270,6 +1271,8 @@ class VL53L1X
     uint8_t last_status; // status of last I2C transmission
 
     VL53L1X();
+    VL53L1X(i2c_t3, i2c_pins pins = I2C_PINS_DEFAULT);
+  
 
     void setAddress(uint8_t new_addr);
     uint8_t getAddress() { return address; }
@@ -1308,7 +1311,7 @@ class VL53L1X
 
     // The Arduino two-wire interface uses a 7-bit number for the address,
     // and sets the last bit correctly based on reads and writes
-    static const uint8_t AddressDefault = 0b0101001;
+    uint8_t AddressDefault = 0b0101001;
 
     // value used in measurement timing budget calculations
     // assumes PresetMode is LOWPOWER_AUTONOMOUS
@@ -1381,4 +1384,8 @@ class VL53L1X
 
     // Convert count rate from fixed point 9.7 format to float
     float countRateFixedToFloat(uint16_t count_rate_fixed) { return (float)count_rate_fixed / (1 << 7); }
+
+    i2c_t3 Wire;
+    i2c_t3 i2cDefault = i2c_t3(0); 
+    i2c_pins i2cPins = I2C_PINS_DEFAULT;
 };
