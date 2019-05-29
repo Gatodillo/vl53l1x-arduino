@@ -34,7 +34,7 @@ VL53L1X::VL53L1X(i2c_t3 wire, i2c_pins pins)
   , Wire(wire)
   , i2cPins(pins)
 {
-  Wire.begin(I2C_MASTER, 0x00, i2cPins, I2C_PULLUP_INT, 400000);
+  Wire.begin(I2C_MASTER, 0x00, i2cPins, I2C_PULLUP_EXT, 400000);
   //Wire.setClock(400000); // use 400 kHz I2C
 }
 
