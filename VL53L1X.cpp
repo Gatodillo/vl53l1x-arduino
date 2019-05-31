@@ -4,7 +4,7 @@
 // VL53L1X datasheet.
 
 #include <VL53L1X.h>
-#include <i2c_t3.h>
+#include <Wire.h>
 
 // Constructors ////////////////////////////////////////////////////////////////
 
@@ -16,28 +16,8 @@ VL53L1X::VL53L1X()
   , saved_vhv_init(0)
   , saved_vhv_timeout(0)
   , distance_mode(Unknown)
-  , Wire(i2cDefault)
-  , i2cPins(I2C_PINS_DEFAULT)
 {
-  Wire.begin();
-  Wire.setClock(400000); // use 400 kHz I2C
 }
-
-VL53L1X::VL53L1X(i2c_t3 wire, i2c_pins pins)
-  : address(AddressDefault)
-  , io_timeout(0) // no timeout
-  , did_timeout(false)
-  , calibrated(false)
-  , saved_vhv_init(0)
-  , saved_vhv_timeout(0)
-  , distance_mode(Unknown)
-  , Wire(wire)
-  , i2cPins(pins)
-{
-  Wire.begin(I2C_MASTER, 0x00, i2cPins, I2C_PULLUP_EXT, 400000);
-  //Wire.setClock(400000); // use 400 kHz I2C
-}
-
 
 // Public Methods //////////////////////////////////////////////////////////////
 
@@ -53,10 +33,8 @@ void VL53L1X::setAddress(uint8_t new_addr)
 // mode.
 bool VL53L1X::init(bool io_2v8)
 {
-
-
   // check model ID and module type registers (values specified in datasheet)
-  if (readReg16Bit(IDENTIFICATION__MODEL_ID) != 0xEACC) { Serial.println(address,HEX);Serial.println("E1");return false; }
+  if (readReg16Bit(IDENTIFICATION__MODEL_ID) != 0xEACC) { return false; }
 
   // VL53L1_software_reset() begin
 
@@ -78,7 +56,6 @@ bool VL53L1X::init(bool io_2v8)
     if (checkTimeoutExpired())
     {
       did_timeout = true;
-      Serial.println("E2");
       return false;
     }
   }
