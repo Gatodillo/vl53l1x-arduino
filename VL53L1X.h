@@ -1386,6 +1386,5 @@ class VL53L1X
     float countRateFixedToFloat(uint16_t count_rate_fixed) { return (float)count_rate_fixed / (1 << 7); }
 
     i2c_t3 Wire;
-    i2c_t3 i2cDefault = i2c_t3(0); 
-    i2c_pins i2cPins = I2C_PINS_DEFAULT;
+    const i2c_pins I2C_PINS = I2C_PINS_18_19;
 };

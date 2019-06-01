@@ -16,8 +16,8 @@ VL53L1X::VL53L1X()
   , saved_vhv_init(0)
   , saved_vhv_timeout(0)
   , distance_mode(Unknown)
-  , Wire(i2cDefault)
-  , i2cPins(I2C_PINS_DEFAULT)
+  , Wire(i2c_t3(0))
+  , I2C_PINS(I2C_PINS_DEFAULT)
 {
   Wire.begin();
   Wire.setClock(400000); // use 400 kHz I2C
@@ -32,9 +32,9 @@ VL53L1X::VL53L1X(i2c_t3 wire, i2c_pins pins)
   , saved_vhv_timeout(0)
   , distance_mode(Unknown)
   , Wire(wire)
-  , i2cPins(pins)
+  , I2C_PINS(pins)
 {
-  Wire.begin(I2C_MASTER, 0x00, i2cPins, I2C_PULLUP_EXT, 400000);
+  Wire.begin(I2C_MASTER, 0x00, I2C_PINS, I2C_PULLUP_EXT, 400000);
   //Wire.setClock(400000); // use 400 kHz I2C
 }
 
